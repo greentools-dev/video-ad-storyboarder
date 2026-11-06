@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Short-Form Video Ad Beat & Storyboard Creator | 100% Client-Side BYOK Studio</title>
+  <meta name="description" content="Generate high-converting second-by-second video ad storyboards and shooting scripts for TikTok, Reels, and Shorts. Direct AI generation with CSV export and printable production sheets.">
+  <meta name="keywords" content="video ad storyboarder, tiktok ad script generator, short-form video planner, video ad beat creator, ugc shooting script, video marketing byok">
+  <link rel="canonical" href="https://greentools-dev.github.io/video-ad-storyboarder/">
+  <meta property="og:title" content="Short-Form Video Ad Beat & Storyboard Creator">
+  <meta property="og:description" content="Second-by-second short-form ad beat storyboarder with shooting script CSV export. 100% private in-browser tool.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://greentools-dev.github.io/video-ad-storyboarder/">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-storyboard-mount, #print-storyboard-mount * {
+        visibility: visible;
+      }
+      #print-storyboard-mount {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white;
+      }
+    }
+  </style>
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Short-Form Video Ad Beat & Storyboard Creator",
+        "url": "https://greentools-dev.github.io/video-ad-storyboarder/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "description": "Short-form video ad storyboard planner. Generates hook, problem agitation, solution demo, and CTA beats with visual cues, OST, and voiceover scripts.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why is second-by-second pacing crucial for TikTok and Reels ads?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Viewers decide whether to skip an ad in the first 2 seconds. Breaking down an ad into explicit beats (Hook, Agitation, Solution, Proof, CTA) guarantees tight pacing and prevents drop-off."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export the script for production crews?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Click 'Export Script (CSV)' to receive a structured spreadsheet with columns for Timestamp, Visual Direction, On-Screen Text, and Audio Voiceover, or click 'Print Storyboard' for a physical on-set sheet."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this tool work without an API key?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Click 'Try Demo (No Key)' to load realistic video ad beats, edit scene cues in real time, and export CSVs immediately."
+            }
+          }
+        ]
+      }
+    ]
+  </script>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm shadow-purple-500/20">
+          <i data-lucide="clapperboard" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-slate-900 tracking-tight text-lg">GreenTools<span class="text-purple-600">.dev</span></span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200/60">Video Storyboarder</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- BYOK Key Trigger -->
+        <button type="button" id="btn-open-settings" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors shadow-2xs">
+          <i data-lucide="key" class="w-3.5 h-3.5 text-purple-600"></i>
+          <span id="key-status-label">API Key: Not Set</span>
+        </button>
+        <a href="https://github.com/greentools-dev/video-ad-storyboarder" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-slate-900 transition-colors p-1.5">
+          <i data-lucide="github" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Error / Alert Banner -->
+  <div id="alert-banner" class="hidden max-w-7xl mx-auto px-4 mt-4">
+    <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-medium text-amber-800 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 shrink-0"></i>
+        <span id="alert-message">Notice message</span>
+      </div>
+      <button type="button" id="btn-close-alert" class="text-amber-600 hover:text-amber-800 p-1">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero & Primary Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8 md:py-10 flex flex-col">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        Short-Form Video Ad Storyboard Creator
+      </h1>
+      <p class="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Pace high-converting 15s, 30s, and 60s video ads for TikTok, Instagram Reels, and YouTube Shorts. Generates visual cues, on-screen text, and voiceover scripts.
+      </p>
+    </div>
+
+    <!-- Top Generation Input Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-8 max-w-4xl mx-auto w-full flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-purple-600"></i>
+          Product &amp; Ad Parameters
+        </span>
+        <button type="button" id="btn-demo-mode" class="text-xs font-semibold text-purple-700 hover:text-purple-800 underline underline-offset-2">
+          Try Demo (No Key)
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div>
+          <label for="input-product" class="block font-semibold text-slate-700 mb-1">Product or Service Name</label>
+          <input type="text" id="input-product" placeholder="e.g. GreenTools Studio (In-Browser Tools)" class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium">
+        </div>
+        <div>
+          <label for="select-duration" class="block font-semibold text-slate-700 mb-1">Target Duration &amp; Format</label>
+          <select id="select-duration" class="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500">
+            <option value="30s" selected>30 Seconds (Optimal for TikTok &amp; Reels)</option>
+            <option value="15s">15 Seconds (Rapid Hook &amp; Problem)</option>
+            <option value="60s">60 Seconds (Full UGC Demo &amp; Review)</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="input-painpoint" class="block text-xs font-semibold text-slate-700 mb-1">Primary Customer Pain Point / Core Problem</label>
+        <textarea id="input-painpoint" rows="2" placeholder="e.g. Paying $20/month for simple PDF redacting and CSV formatting tools while worrying about confidential client data leaks..." class="w-full p-2.5 text-xs font-sans rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+      </div>
+
+      <div class="pt-2 flex items-center justify-between gap-3 flex-wrap">
+        <span class="text-[11px] text-slate-400">Generates 4-5 calibrated scenes with Visual Cues, OST, and Voiceover.</span>
+        <button type="button" id="btn-generate-ai" class="py-2.5 px-6 rounded-xl bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white font-bold text-xs transition-all shadow-md shadow-purple-600/20 flex items-center justify-center gap-2">
+          <i data-lucide="wand-2" class="w-4 h-4"></i>
+          <span id="label-generate">Generate Video Ad Storyboard</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Storyboard Workspace -->
+    <div id="storyboard-workspace" class="max-w-5xl mx-auto w-full flex flex-col gap-6">
+      
+      <!-- Toolbar & Export Actions Header -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 id="storyboard-title" class="text-base sm:text-lg font-bold text-slate-900">GreenTools Studio &bull; 30-Second UGC Ad Script</h2>
+          <div class="text-xs text-slate-500 mt-0.5">
+            Format: 9:16 Vertical Video &bull; 4 Storyboard Beats
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" id="btn-print-storyboard" class="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-2xs">
+            <i data-lucide="printer" class="w-3.5 h-3.5 text-purple-600"></i>
+            Print Storyboard
+          </button>
+          <button type="button" id="btn-export-csv" class="px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-sm shadow-purple-600/20">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            Export Script (CSV)
+          </button>
+        </div>
+      </div>
+
+      <!-- Storyboard Timeline Cards Grid -->
+      <div id="timeline-container" class="space-y-4">
+        <!-- Dynamically rendered scene beats -->
+      </div>
+
+    </div>
+
+    <!-- Hidden Print Mount -->
+    <div id="print-storyboard-mount" class="hidden print:block"></div>
+
+    <!-- Sponsor Slot -->
+    <aside id="sponsor-slot" class="mt-12 p-5 rounded-2xl border border-dashed border-slate-300 bg-white text-center text-xs text-slate-500 max-w-3xl mx-auto shadow-2xs">
+      <span class="font-semibold text-slate-600 uppercase tracking-wider text-[11px] block mb-1">Sponsored</span>
+      Scale your TikTok, Meta, and YouTube ad creatives with GreenTools Video Studio.
+    </aside>
+
+    <!-- FAQ & Guide -->
+    <section class="mt-12 bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm max-w-5xl mx-auto w-full">
+      <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+        <i data-lucide="help-circle" class="w-5 h-5 text-purple-600"></i>
+        Video Storyboard Guide &amp; Frequently Asked Questions
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">What is On-Screen Text (OST) and why is it essential?</h3>
+          <p class="leading-relaxed">
+            Over 65% of mobile users browse TikTok and Instagram with sound muted. Having bold, punchy on-screen text matching the spoken script ensures complete retention even in silent feed environments.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">How does the 30-second formula convert?</h3>
+          <p class="leading-relaxed">
+            The structure begins with a 0-3 second visual pattern-interrupt hook, followed by 7 seconds of relatable pain agitation, 10 seconds of clear product demonstration, and ends with 10 seconds of social proof and direct call-to-action.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">Can I send the CSV directly to UGC creators?</h3>
+          <p class="leading-relaxed">
+            Yes! Click "Export Script (CSV)" to download a spreadsheet with exact columns for Timestamps, Visual Cues, Text Overlays, and Voiceover Lines ready for creators or voice actors.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-800 mb-1">Is this tool private?</h3>
+          <p class="leading-relaxed">
+            100% private. All ad concepts, product descriptions, scripts, and API credentials are kept strictly in your local browser session.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BYOK Settings Modal -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+          <i data-lucide="key" class="w-4 h-4 text-purple-600"></i>
+          AI Provider &amp; API Key Settings
+        </h3>
+        <button type="button" id="btn-close-settings" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="text-xs text-slate-500 leading-relaxed">
+        Enter your API key. It is saved only in local storage on this computer and used for direct browser-to-API calls.
+      </div>
+
+      <!-- Provider Selector -->
+      <div>
+        <label for="select-provider" class="block text-xs font-semibold text-slate-700 mb-1">AI Provider</label>
+        <select id="select-provider" class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500">
+          <option value="gemini" selected>Google Gemini (Recommended &bull; Fast Free Tier)</option>
+          <option value="openai">OpenAI / OpenRouter</option>
+        </select>
+      </div>
+
+      <!-- Model Name -->
+      <div>
+        <label for="input-model" class="block text-xs font-semibold text-slate-700 mb-1">Model Name</label>
+        <input type="text" id="input-model" value="gemini-2.5-flash" class="w-full px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-purple-500">
+      </div>
+
+      <!-- Key Input -->
+      <div>
+        <label for="input-api-key" class="block text-xs font-semibold text-slate-700 mb-1">API Key</label>
+        <input type="password" id="input-api-key" placeholder="AIzaSy... or sk-..." class="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-purple-500">
+      </div>
+
+      <!-- Actions -->
+      <div class="pt-2 flex items-center justify-between gap-2">
+        <button type="button" id="btn-clear-key" class="px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+          Clear Key
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" id="btn-cancel-settings" class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 rounded-lg border border-slate-200 transition-colors">
+            Cancel
+          </button>
+          <button type="button" id="btn-save-settings" class="px-4 py-1.5 text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors shadow-sm">
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white mt-12 py-8">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">GreenTools.dev</span>
+        <span>&bull;</span>
+        <span>100% Client-Side Web Studios</span>
+      </div>
+      <div>
+        Zero Server Storage &bull; Private Local Keys &bull; No Telemetry
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    lucide.createIcons();
+
+    // Default Demo Storyboard Beats
+    const defaultBeats = [
+      {
+        timestamp: "00:00 - 00:03",
+        sceneName: "The Pattern Interrupt Hook",
+        visualCues: "Fast-paced macro shot of a hand slamming a laptop closed in disgust. Quick crash-zoom on frustrating software billing notification.",
+        onScreenText: "Still paying $49/mo for simple web tools?!",
+        voiceover: "Stop paying monthly subscriptions for tools your browser can do for free."
+      },
+      {
+        timestamp: "00:03 - 00:09",
+        sceneName: "The Relatable Problem Agitation",
+        visualCues: "Screen recording showing 6 different SaaS browser tabs all demanding credit card upgrades just to crop a photo or clean a CSV.",
+        onScreenText: "Subscription fatigue is getting out of hand.",
+        voiceover: "Every single utility wants your email, your credit card, and your private data on their servers."
+      },
+      {
+        timestamp: "00:09 - 00:20",
+        sceneName: "The Product Solution & Live Demo",
+        visualCues: "Smooth screen recording of GreenTools.dev. User drags an audio file into the LUFS meter, and instant compliance gauges render in 0.2 seconds.",
+        onScreenText: "30+ Zero-Server Web Tools. 100% Client-Side.",
+        voiceover: "Meet GreenTools. 30 high-utility developer and creator tools running 100% in your browser memory."
+      },
+      {
+        timestamp: "00:20 - 00:30",
+        sceneName: "Social Proof & Call to Action",
+        visualCues: "Creator pointing directly at URL banner on screen with green checkmark animation: 'Zero Login Required'.",
+        onScreenText: "Bookmark GreenTools.dev &bull; Save hundreds annually",
+        voiceover: "No signups, no cloud bills, zero tracking. Tap the link to bookmark the directory today!"
+      }
+    ];
+
+    let currentBeats = JSON.parse(JSON.stringify(defaultBeats));
+
+    // DOM Elements
+    const inputProduct = document.getElementById('input-product');
+    const inputPainpoint = document.getElementById('input-painpoint');
+    const selectDuration = document.getElementById('select-duration');
+    const btnGenerateAi = document.getElementById('btn-generate-ai');
+    const labelGenerate = document.getElementById('label-generate');
+    const btnDemoMode = document.getElementById('btn-demo-mode');
+
+    const storyboardTitle = document.getElementById('storyboard-title');
+    const timelineContainer = document.getElementById('timeline-container');
+    const printStoryboardMount = document.getElementById('print-storyboard-mount');
+    const btnPrintStoryboard = document.getElementById('btn-print-storyboard');
+    const btnExportCsv = document.getElementById('btn-export-csv');
+
+    const alertBanner = document.getElementById('alert-banner');
+    const alertMessage = document.getElementById('alert-message');
+    const btnCloseAlert = document.getElementById('btn-close-alert');
+
+    // Settings Modal Elements
+    const btnOpenSettings = document.getElementById('btn-open-settings');
+    const settingsModal = document.getElementById('settings-modal');
+    const btnCloseSettings = document.getElementById('btn-close-settings');
+    const btnCancelSettings = document.getElementById('btn-cancel-settings');
+    const btnSaveSettings = document.getElementById('btn-save-settings');
+    const btnClearKey = document.getElementById('btn-clear-key');
+    const inputApiKey = document.getElementById('input-api-key');
+    const selectProvider = document.getElementById('select-provider');
+    const inputModel = document.getElementById('input-model');
+    const keyStatusLabel = document.getElementById('key-status-label');
+
+    function loadSettings() {
+      const savedKey = localStorage.getItem('byok_api_key') || '';
+      const savedProvider = localStorage.getItem('byok_provider') || 'gemini';
+      const savedModel = localStorage.getItem('byok_model') || (savedProvider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-4o-mini');
+
+      inputApiKey.value = savedKey;
+      selectProvider.value = savedProvider;
+      inputModel.value = savedModel;
+
+      if (savedKey) {
+        keyStatusLabel.textContent = `API Key: Connected (${savedProvider})`;
+        keyStatusLabel.parentElement.classList.replace('text-slate-700', 'text-purple-700');
+        keyStatusLabel.parentElement.classList.add('bg-purple-50', 'border-purple-200');
+      } else {
+        keyStatusLabel.textContent = 'API Key: Not Set';
+      }
+    }
+
+    btnOpenSettings.addEventListener('click', () => settingsModal.classList.remove('hidden'));
+    function closeSettings() { settingsModal.classList.add('hidden'); }
+    btnCloseSettings.addEventListener('click', closeSettings);
+    btnCancelSettings.addEventListener('click', closeSettings);
+
+    btnSaveSettings.addEventListener('click', () => {
+      const key = inputApiKey.value.trim();
+      const prov = selectProvider.value;
+      const model = inputModel.value.trim();
+
+      if (key) {
+        localStorage.setItem('byok_api_key', key);
+        localStorage.setItem('byok_provider', prov);
+        localStorage.setItem('byok_model', model);
+      } else {
+        localStorage.removeItem('byok_api_key');
+      }
+      loadSettings();
+      closeSettings();
+    });
+
+    btnClearKey.addEventListener('click', () => {
+      localStorage.removeItem('byok_api_key');
+      inputApiKey.value = '';
+      loadSettings();
+      closeSettings();
+    });
+
+    function showAlert(msg) {
+      alertMessage.textContent = msg;
+      alertBanner.classList.remove('hidden');
+    }
+    btnCloseAlert.addEventListener('click', () => alertBanner.classList.add('hidden'));
+
+    // Render Timeline Storyboard
+    function renderTimeline() {
+      timelineContainer.innerHTML = '';
+
+      currentBeats.forEach((beat, index) => {
+        const beatCard = document.createElement('div');
+        beatCard.className = 'bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col gap-3 hover:border-purple-300 transition-colors';
+
+        beatCard.innerHTML = `
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 font-mono font-bold text-xs">
+                ${beat.timestamp}
+              </span>
+              <span class="font-bold text-slate-900 text-sm">Beat ${index + 1}: ${beat.sceneName}</span>
+            </div>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Scene ${index + 1}</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <!-- Visual Scene Cues -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1.5">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                <i data-lucide="video" class="w-3.5 h-3.5 text-purple-600"></i>
+                Visual Scene Direction
+              </span>
+              <p class="text-slate-600 leading-relaxed font-sans">${beat.visualCues}</p>
+            </div>
+
+            <!-- On-Screen Text (OST) -->
+            <div class="p-3 rounded-xl bg-purple-50/60 border border-purple-100 flex flex-col gap-1.5">
+              <span class="font-bold text-purple-900 flex items-center gap-1.5">
+                <i data-lucide="type" class="w-3.5 h-3.5 text-purple-600"></i>
+                On-Screen Text (OST)
+              </span>
+              <p class="text-purple-950 font-bold leading-relaxed font-sans">"${beat.onScreenText}"</p>
+            </div>
+
+            <!-- Spoken Audio / Voiceover -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1.5">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                <i data-lucide="mic" class="w-3.5 h-3.5 text-purple-600"></i>
+                Voiceover / Dialogue
+              </span>
+              <p class="text-slate-600 italic leading-relaxed font-sans">"${beat.voiceover}"</p>
+            </div>
+          </div>
+        `;
+
+        timelineContainer.appendChild(beatCard);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Demo Mode Loader
+    btnDemoMode.addEventListener('click', () => {
+      currentBeats = JSON.parse(JSON.stringify(defaultBeats));
+      storyboardTitle.textContent = "GreenTools Studio • 30-Second UGC Ad Script";
+      renderTimeline();
+      showAlert('Loaded 30-second GreenTools UGC ad storyboard demo!');
+    });
+
+    // Export Shooting Script CSV
+    btnExportCsv.addEventListener('click', () => {
+      let csv = "Beat #,Timestamp,Beat Title,Visual Cues,On-Screen Text (OST),Voiceover Line\n";
+      currentBeats.forEach((b, idx) => {
+        const escapeCsv = (str) => `"${(str || '').replace(/"/g, '""')}"`;
+        csv += `${idx + 1},${escapeCsv(b.timestamp)},${escapeCsv(b.sceneName)},${escapeCsv(b.visualCues)},${escapeCsv(b.onScreenText)},${escapeCsv(b.voiceover)}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'shooting-script-storyboard.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // Print Storyboard Sheet
+    btnPrintStoryboard.addEventListener('click', () => {
+      printStoryboardMount.innerHTML = `
+        <h1 style="font-size: 20pt; font-weight: bold; margin-bottom: 6px;">${storyboardTitle.textContent}</h1>
+        <p style="font-size: 10pt; color: #64748b; margin-bottom: 24px;">Shooting Script & Storyboard Sheet &bull; GreenTools.dev</p>
+        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 10pt;">
+          <thead>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; text-align: left;">
+              <th style="padding: 10px; width: 15%;">Timestamp</th>
+              <th style="padding: 10px; width: 35%;">Visual Direction</th>
+              <th style="padding: 10px; width: 25%;">On-Screen Text</th>
+              <th style="padding: 10px; width: 25%;">Voiceover Line</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      currentBeats.forEach(b => {
+        printStoryboardMount.innerHTML += `
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 10px; font-weight: bold; font-family: monospace;">${b.timestamp}<br><span style="font-size: 8pt; font-family: sans-serif; color: #64748b;">${b.sceneName}</span></td>
+            <td style="padding: 10px;">${b.visualCues}</td>
+            <td style="padding: 10px; font-weight: bold;">${b.onScreenText}</td>
+            <td style="padding: 10px; font-style: italic;">${b.voiceover}</td>
+          </tr>
+        `;
+      });
+
+      printStoryboardMount.innerHTML += `</tbody></table>`;
+      window.print();
+    });
+
+    // AI Generation via Direct In-Browser Fetch (BYOK)
+    btnGenerateAi.addEventListener('click', async () => {
+      const product = inputProduct.value.trim();
+      const painpoint = inputPainpoint.value.trim();
+      if (!product || !painpoint) {
+        showAlert('Please enter both product name and customer pain point.');
+        return;
+      }
+
+      const apiKey = localStorage.getItem('byok_api_key');
+      if (!apiKey) {
+        showAlert('No API Key detected. Please click "API Key: Not Set" to enter your key, or use "Try Demo" to preview.');
+        settingsModal.classList.remove('hidden');
+        return;
+      }
+
+      const provider = localStorage.getItem('byok_provider') || 'gemini';
+      const model = localStorage.getItem('byok_model') || (provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-4o-mini');
+      const duration = selectDuration.value;
+
+      labelGenerate.textContent = 'Generating Scene Beats...';
+      btnGenerateAi.disabled = true;
+
+      const systemPrompt = `You are an elite short-form direct-response video director.
+Create a high-CTR ${duration} short-form video ad storyboard for:
+Product: "${product}"
+Customer Pain Point: "${painpoint}"
+
+Generate a structured sequence of 4 distinct beats:
+Beat 1: Pattern-Interrupt Hook (0-3s)
+Beat 2: Relatable Problem Agitation
+Beat 3: Product Solution & Benefit Demo
+Beat 4: Social Proof & Call-to-Action
+
+Return ONLY a valid JSON array of 4 objects matching this exact schema:
+[
+  {
+    "timestamp": "00:00 - 00:03",
+    "sceneName": "The Pattern Interrupt Hook",
+    "visualCues": "Specific camera angle and actor action instructions",
+    "onScreenText": "Short punchy on-screen text caption (under 7 words)",
+    "voiceover": "Natural conversational voiceover line (under 18 words)"
+  }
+]
+Return zero extra markdown text outside the JSON.`;
+
+      try {
+        let jsonResponseText = '';
+
+        if (provider === 'gemini') {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: systemPrompt }] }],
+              generationConfig: { responseMimeType: 'application/json' }
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Gemini returned status ${res.status}`);
+          }
+
+          const data = await res.json();
+          jsonResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        } else {
+          const url = `https://api.openai.com/v1/chat/completions`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+              model: model,
+              messages: [{ role: 'user', content: systemPrompt }],
+              response_format: { type: 'json_object' }
+            })
+          });
+
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `OpenAI returned status ${res.status}`);
+          }
+
+          const data = await res.json();
+          jsonResponseText = data.choices?.[0]?.message?.content;
+        }
+
+        let parsed = JSON.parse(jsonResponseText);
+        if (!Array.isArray(parsed) && parsed.beats) parsed = parsed.beats;
+
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          currentBeats = parsed;
+          storyboardTitle.textContent = `${product} • ${duration} Short-Form Ad Script`;
+          renderTimeline();
+          showAlert(`Successfully generated ${parsed.length} scene beats with ${model}!`);
+        } else {
+          throw new Error('AI returned an unexpected array structure.');
+        }
+
+      } catch (err) {
+        console.error(err);
+        showAlert(`Generation failed: ${err.message}`);
+      } finally {
+        labelGenerate.textContent = 'Generate Video Ad Storyboard';
+        btnGenerateAi.disabled = false;
+      }
+    });
+
+    // Initialization
+    loadSettings();
+    renderTimeline();
+  </script>
+</body>
+</html>
